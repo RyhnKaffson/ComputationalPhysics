@@ -4,15 +4,15 @@
 % Simple projectile motion, using Euler's method
 %-------------------------------------------------------------------------------
 
-% Clear memory and only show a few digits
-clear all; format short;
+% Only show a few digits:
+format('short');
 
 % Dimensionalisation parameters
 G = 9.8; % Acceleration due to gravity (m/s^2)
-LS = 1.0; % Choice for scaling length (m)
-TS = sqrt(LS/G); % Choice for scale for time (s)
+Ls = 1.0; % Choice for scaling length (m)
+Ts = sqrt(Ls/G); % Choice for scale for time (s)
 
-% Non-dimensional timestep
+% Non-dimensional time-step, tau
 tau = 0.1;
 
 % Prompt user for initial speed and angle
@@ -23,41 +23,45 @@ angle = input('Enter initial angle in degrees: ');
 angle = angle*pi/180;
 
 % Non-dimensionalise initial speed
-speed = speed_m/(LS/TS);
+speed = speed_m/(Ls/Ts);
 
 % Row vectors for non-dimensional position and velocity
 pos = [0 0];
 vel = speed*[cos(angle) sin(angle)];
 
-% Preallocate
+% Initialize variables to save for plotting:
 x = [];
 y = [];
 
-% Euler's method integration
-n = 0;
+%-------------------------------------------------------------------------------
+% Euler's method!:
+%-------------------------------------------------------------------------------
+n = 1;
 while pos(2) >= 0
+    % Compute one step of Euler's method:
+    % r_{n+1} = r_n + τ v_n
+    pos = pos + tau*vel;
+    % v_{n+1} = v_n - τ \hat{y}
+    vel = vel + tau*[0 -1];
 
-  % Store position for plotting
-  n = n+1;
-  x(n) = pos(1);
-  y(n) = pos(2);
-
-  % One step of Euler's method
-  pos = pos + tau*vel;
-  vel = vel + tau*[0 -1];
+    % Store position for plotting:
+    x(n) = pos(1);
+    y(n) = pos(2);
+    n = n + 1;
 end
+%-------------------------------------------------------------------------------
 
-% Plot the trajectory as circles
-plot(LS*x,LS*y,'o')
+% Plot the trajectory (as dimensional values):
+f = figure('color','w');
+plot(Ls*x,Ls*y,'o-k')
 xlabel('Distance (m)')
 ylabel('Height (m)')
 
-% Linear interpolation to estimate the range of the projectile,
-% with conversion to m
-range = pos(1)-pos(2)*(pos(1)-x(end))/(pos(2)-y(end));
-range_m = LS*range;
-disp(['Range (m): ',num2str(range_m)])
+% Linear interpolation to estimate the range of the projectile
+range = pos(1) - pos(2)*(pos(1)-x(end))/(pos(2)-y(end));
+range_m = Ls*range; % convert back to m
+fprintf('Range (m): %f\n',range_m)
 
 % Analytic expression for range
 an_range_m = speed_m^2*sin(2*angle)/G;
-disp(['Analytic value for range (m): ',num2str(an_range_m)])
+fprintf('Analytic value for range (m): %f.\n',an_range_m)
