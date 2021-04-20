@@ -36,18 +36,19 @@ y = [];
 %-------------------------------------------------------------------------------
 % Euler's method!:
 %-------------------------------------------------------------------------------
-n = 1;
+n = 0;
 while pos(2) >= 0
+    n = n + 1;
+
+    % Store position for plotting:
+    x(n) = pos(1);
+    y(n) = pos(2);
+
     % Compute one step of Euler's method:
     % r_{n+1} = r_n + τ v_n
     pos = pos + tau*vel;
     % v_{n+1} = v_n - τ \hat{y}
     vel = vel + tau*[0 -1];
-
-    % Store position for plotting:
-    x(n) = pos(1);
-    y(n) = pos(2);
-    n = n + 1;
 end
 %-------------------------------------------------------------------------------
 
