@@ -6,6 +6,7 @@ Check back for updates :smile:
 ## Lecture 1
 
 - `proj_euler.m`.
+  - Solves the projectile motion problem using the Euler method.
 
 ## Lecture 2
 
@@ -29,6 +30,6 @@ The simple pendulum:
 Solving the diffusion equation.
 
 - `diffusion_ftcs.m`
-  - Solve the 1-D diffusion equation for an initial spike profile with Dirichlet conditions using FTCS, in a matrix formulation.
+  - Solves the 1-D diffusion equation for an initial spike profile with Dirichlet conditions using FTCS, in a matrix formulation.
 - `diffusion_ftcs_n.m`
-  - Solve the 1-D diffusion equation for an initial spike profile with Neumann conditions using FTCS, in a matrix formulation.
+  - Solves the 1-D diffusion equation for an initial spike profile with Neumann conditions using FTCS, in a matrix formulation.
