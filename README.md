@@ -3,7 +3,7 @@
 Code to accompany lectures.
 Check back for updates :smile:
 
-## Lecture 1: Projecile motion using the Euler method
+## Lecture 1: Projectile motion using the Euler method
 
 - `proj_euler.m`.
   - Solves the projectile motion problem using the Euler method.
