@@ -7,7 +7,7 @@ clear('all');
 format('short');
 
 % Time step (non-dim.)
-tau = 0.01;
+tau = 0.05;
 
 % Initial position (non-dim.) - this should be fixed
 pos = [1 0];
@@ -22,7 +22,9 @@ T = 4*pi;
 numSteps = ceil(T/tau);
 
 % Plot only 100 frames in total
-skip = ceil(numSteps/100);
+numFrames = 100;
+% Plot every 'skip' iterations:
+skip = ceil(numSteps/numFrames);
 
 % Calculate trajectory from analytic solution.
 % See Appendix of Lecture 2.
@@ -38,6 +40,7 @@ energy = zeros(numSteps,1);
 % Euler's method integration
 %-------------------------------------------------------------------------------
 figure(1);
+xlabel('x'); ylabel('y');
 for n = 1:numSteps
 
     % Store position and time for plotting: time step n
@@ -48,9 +51,7 @@ for n = 1:numSteps
     % Plot numerical and analytic solution
     if rem(n,skip)==0
         plot(x,y,'g-',pos(1),pos(2),'ko',xan,yan,'b',0,0,'ro')
-        title(['Time: ',num2str(time(n))]);
-        xlabel('x');
-        ylabel('y');
+        title(sprintf('Time: %f',time(n)));
         axis('equal'); % Preserve aspect ratio
         drawnow; % Draw immediately
     end

@@ -3,16 +3,19 @@
 Code to accompany lectures.
 Check back for updates :smile:
 
-## Lecture 1
+## Lecture 1: Projecile motion using the Euler method
 
 - `proj_euler.m`.
   - Solves the projectile motion problem using the Euler method.
 
-## Lecture 2
+## Lecture 2: Keplerian dynamics using the Verlet method
 
 - `kepler_euler.m`
+  - Solves the Kepler problem using the Euler method.
 - `kepler_verlet.m`
+  - Solves the Kepler problem using the Verlet method.
 - `kepler_analytic.m`
+  - Solves the Kepler problem analytically.
 
 ## Lecture 3
 
