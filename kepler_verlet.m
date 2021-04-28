@@ -14,7 +14,7 @@ pos = [1 0];
 % Initial velocity (non-dim.) - vary the y-component
 vel = [0 1];
 
-% Total integration time
+% Total integration time (non-dim)
 T = 4*pi;
 
 % Number of integration steps
