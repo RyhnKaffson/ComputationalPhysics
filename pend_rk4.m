@@ -10,10 +10,11 @@ format('short');
 tau = 0.025; % Time step
 T = 10; % Total integration time
 numSteps = ceil(T/tau); % Number of time steps
+frameUpdateLag = 0; % Slow down the animation
 
 %-------------------------------------------------------------------------------
 % Initial conditions
-theta1 = 180; % Initial angle in degrees
+theta1 = 50; % Initial angle in degrees
 theta = theta1*pi/180;
 x = [theta 0];
 
@@ -22,28 +23,38 @@ x = [theta 0];
 time = zeros(numSteps,1);
 
 %-------------------------------------------------------------------------------
+% Set up for efficient animation
+figure('color','w');
+h = plot([0,sin(x(1))],[0,-cos(x(1))],'o-k','LineWidth',2);
+axis('equal')
+axis([-1 1 -1 1])
+% Prevent axes limits from changing:
+h.YLimInclude = 'off';
+h.XLimInclude = 'off';
+
+%-------------------------------------------------------------------------------
 % Fourth-order Runge-Kutta integration
-figure(1);
 for n = 1:numSteps
     % Time
     time(n) = (n-1)*tau;
 
     % One step of RK4
     f1 = rhs_pend(x);
-    f2 = rhs_pend(x+0.5*tau*f1);
-    f3 = rhs_pend(x+0.5*tau*f2);
-    f4 = rhs_pend(x+tau*f3);
-    x = x+tau*(f1+2*f2+2*f3+f4)/6;
+    f2 = rhs_pend(x + 0.5*tau*f1);
+    f3 = rhs_pend(x + 0.5*tau*f2);
+    f4 = rhs_pend(x + tau*f3);
+    x = x+tau*(f1 + 2*f2+2*f3 + f4)/6;
 
+    % Update the pendulum position:
     % Co-ordinates of the pendulum bar
     xPend = [0  sin(x(1))];
     yPend = [0 -cos(x(1))];
+    % plot(xPend,yPend,'o-'):
+    h.XData = xPend;
+    h.YData = yPend;
 
-    % Animate the pendulum motion
-    plot(xPend,yPend,'o-')
-    title(sprintf('Time: %5.3f',time(n)+tau))
-    axis('equal')
-    axis([-1 1 -1 1])
-    pause(0.05);
-    drawnow;
+    % Update time and keep axes fixed:
+    title(sprintf('Time: %5.3f',time(n) + tau))
+    pause(frameUpdateLag);
+    drawnow()
 end
