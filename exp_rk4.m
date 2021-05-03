@@ -1,7 +1,7 @@
 % exp_rk4.m
-% Integrate dx/dt=x using RK4
+% Integrate dx/dt = x using RK4
 
-% Clear memory and show only a few digits
+% Clear the workspace and show only a few digits
 clear('all');
 format('short');
 

@@ -19,14 +19,21 @@ Check back for updates :smile:
 
 ## Lecture 3
 
-The exponential solution:
+The exponential problem, dx/dt = x:
 - `exp_euler.m`
+  - Solve the exponential problem using Euler.
 - `exp_rk4.m`
+  - Solve the exponential problem using RK4.
 - `rhs_exp.m`
+  - "My first right-hand side" function :baby:
+- `exp_battle`
+  - Animate a step-by-step comparison between Euler and RK4.
 
 The simple pendulum:
 - `pend_rk4.m`
+  - Animates the RK4 solution to the simple pendulum.
 - `rhs_pend.m`
+  - The RHS function for the simple pendulum.
 
 ## Lecture 4
 

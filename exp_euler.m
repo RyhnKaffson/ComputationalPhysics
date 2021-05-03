@@ -1,7 +1,7 @@
 % exp_euler.m
-% Integrate dx/dt=x using Euler's method
+% Integrate dx/dt = x using Euler's method
 
-% Clear memory and show only a few digits
+% Clear the workspace and show only a few digits
 clear('all');
 format('short');
 
