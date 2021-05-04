@@ -25,8 +25,7 @@ numFrames = 100;
 % Plot every 'skip' iterations:
 skip = ceil(numSteps/numFrames);
 
-% Calculate trajectory from analytic solution. See Appendix
-% of Week 2 lecture 1.
+% Calculate trajectory from analytic solution (see Appendix of Lecture 2).
 [xan,yan] = kepler_analytic(vel,T);
 
 % Preallocate vectors for speed:
@@ -38,8 +37,8 @@ energy = zeros(numSteps+1,1);
 % Set initial values:
 x(1) = pos(1);
 y(1) = pos(2);
-r = norm(pos);
 speed = norm(vel);
+r = norm(pos);
 accel = -pos/r^3;
 energy(1) = 0.5*speed^2 - 1/r;
 
@@ -58,7 +57,7 @@ for n = 1:numSteps
         drawnow(); % Draw immediately
     end
 
-    % Take one step of the Verlet Method:
+    % Take one step of the Verlet Method to update position
     if n==1
         % Get started with a midpoint method step
         next = pos + tau*vel + 0.5*tau^2*accel;
@@ -67,14 +66,21 @@ for n = 1:numSteps
         next = 2*pos - prev + tau^2*accel;
     end
 
-    % Verlet method: velocity at step n
-    if n > 1
-        vel = (next - prev)/(2*tau)
+    % Take one step of the Verlet Method to update velocity
+    % (only required to compute energy, not the trajectory)
+    if n==1
+        % Do a special (Velocity-Verlet) update for the very first step:
+        r = norm(next);
+        accel_n2 = -next/r^3;
+        vel = vel + tau/2*(accel + accel_n2);
+    else % n > 1
+        % Do a Verlet update:
+        vel = (next - prev)/(2*tau);
     end
 
-    % Calculate radial position, speed and acceleration after taking the step:
-    r = norm(next);
+    % Calculate speed, radial position, and acceleration after taking the step:
     speed = norm(vel);
+    r = norm(next);
     accel = -next/r^3;
 
     % Update energy after taking the step:
@@ -84,11 +90,12 @@ for n = 1:numSteps
     x(n+1) = next(1);
     y(n+1) = next(2);
 
-    % Update prev and pos to calculate next in the following step:
+    % Update 'prev' and 'pos' to calculate 'next' in the following step:
     prev = pos;
     pos = next;
 end
 
+%-------------------------------------------------------------------------------
 % Plot energy versus time
 figure(2);
 plot(time,energy);

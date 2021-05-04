@@ -6,7 +6,7 @@ clear('all');
 format('short');
 
 % Number of steps and time step
-numSteps = 20;
+numSteps = 10;
 tau = 1/numSteps;
 
 % Initial values
@@ -36,4 +36,4 @@ end
 
 %-------------------------------------------------------------------------------
 % Display percentage error:
-fprintf(1,'Error: %f%%\n',100*abs(x-exp(1))/exp(1));
+fprintf(1,'Error: %g%%\n',100*abs(x-exp(1))/exp(1));

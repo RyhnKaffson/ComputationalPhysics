@@ -7,8 +7,8 @@ format('short');
 
 %-------------------------------------------------------------------------------
 % Time grid parameters:
-tau = 0.025; % Time step
-T = 10; % Total integration time
+tau = 0.05; % Time step
+T = 8; % Total integration time
 numSteps = ceil(T/tau); % Number of time steps
 frameUpdateLag = 0; % Slow down the animation
 
@@ -19,8 +19,13 @@ theta = theta1*pi/180;
 x = [theta 0];
 
 %-------------------------------------------------------------------------------
+% Rainbow Mode
+rainbowMode = true;
+rainbow = jet(64);
+
+%-------------------------------------------------------------------------------
 % Preallocate:
-time = zeros(numSteps,1);
+time = (0:numSteps)*tau;
 
 %-------------------------------------------------------------------------------
 % Set up for efficient animation
@@ -35,8 +40,6 @@ h.XLimInclude = 'off';
 %-------------------------------------------------------------------------------
 % Fourth-order Runge-Kutta integration
 for n = 1:numSteps
-    % Time
-    time(n) = (n-1)*tau;
 
     % One step of RK4
     f1 = rhs_pend(x);
@@ -52,6 +55,9 @@ for n = 1:numSteps
     % plot(xPend,yPend,'o-'):
     h.XData = xPend;
     h.YData = yPend;
+    if rainbowMode
+        h.Color = rainbow(rem(n,64) + 1,:);
+    end
 
     % Update time and keep axes fixed:
     title(sprintf('Time: %5.3f',time(n) + tau))

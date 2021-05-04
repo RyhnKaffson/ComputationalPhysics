@@ -22,6 +22,7 @@ fprintf('%7.5g %7.5g\n',t,x);
 for n = 1:numSteps
 
     % One step of Euler:
+    % rhs_exp(x) = x.
     f = rhs_exp(x);
     x = x + tau*f;
     t = t + tau;
@@ -32,4 +33,4 @@ end
 
 %-------------------------------------------------------------------------------
 % Display percentage error:
-fprintf(1,'Error: %f%%\n',100*abs(x-exp(1))/exp(1));
+fprintf(1,'Error: %g%%\n',100*abs(x-exp(1))/exp(1));
