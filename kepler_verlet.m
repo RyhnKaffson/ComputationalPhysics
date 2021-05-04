@@ -69,7 +69,7 @@ for n = 1:numSteps
 
     % Verlet method: velocity at step n
     if n > 1
-        vel = (next - pos)/(2*tau);
+        vel = (next - prev)/(2*tau)
     end
 
     % Calculate radial position, speed and acceleration after taking the step:
