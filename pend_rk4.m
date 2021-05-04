@@ -43,7 +43,7 @@ for n = 1:numSteps
     f2 = rhs_pend(x + 0.5*tau*f1);
     f3 = rhs_pend(x + 0.5*tau*f2);
     f4 = rhs_pend(x + tau*f3);
-    x = x+tau*(f1 + 2*f2+2*f3 + f4)/6;
+    x = x + tau*(f1 + 2*f2+2*f3 + f4)/6;
 
     % Update the pendulum position:
     % Co-ordinates of the pendulum bar

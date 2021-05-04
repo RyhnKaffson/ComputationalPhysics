@@ -31,10 +31,18 @@ skip = ceil(numSteps/numFrames);
 [xan,yan] = kepler_analytic(vel,T);
 
 % Preallocate vectors for speed:
-x = zeros(numSteps,1);
-y = zeros(numSteps,1);
-time = zeros(numSteps,1);
-energy = zeros(numSteps,1);
+time = tau*(0:numSteps);
+x = zeros(numSteps+1,1);
+y = zeros(numSteps+1,1);
+energy = zeros(numSteps+1,1);
+
+% Initial values:
+x(1) = pos(1);
+y(1) = pos(2);
+r = norm(pos);
+speed = norm(vel);
+accel = -pos/r^3;
+energy(1) = 0.5*speed^2 - 1/r;
 
 %-------------------------------------------------------------------------------
 % Euler's method integration
@@ -43,30 +51,27 @@ figure(1);
 xlabel('x'); ylabel('y');
 for n = 1:numSteps
 
-    % Store position and time for plotting: time step n
-    x(n) = pos(1);
-    y(n) = pos(2);
-    time(n) = (n-1)*tau;
-
     % Plot numerical and analytic solution
     if rem(n,skip)==0
-        plot(x,y,'g-',pos(1),pos(2),'ko',xan,yan,'b',0,0,'ro')
+        plot(x(1:n),y(1:n),'g-',pos(1),pos(2),'ko',xan,yan,'b',0,0,'ro')
         title(sprintf('Time: %f',time(n)));
         axis('equal'); % Preserve aspect ratio
-        drawnow; % Draw immediately
+        drawnow(); % Draw immediately
     end
 
-    % Calculate radial position, speed and acceleration at step n
+    % Take one step of Euler's method:
+    pos = pos + tau*vel;
+    vel = vel + tau*accel;
+
+    % Calculate radial position, speed and acceleration at step n:
     r = norm(pos);
     speed = norm(vel);
     accel = -pos/r^3;
 
-    % Calculate total energy at step n and store
-    energy(n) = 0.5*speed^2-1/r;
-
-    % One step of Euler's method
-    pos = pos + tau*vel;
-    vel = vel + tau*accel;
+    % Store position, time, energy after taking the step:
+    x(n+1) = pos(1);
+    y(n+1) = pos(2);
+    energy(n+1) = 0.5*speed^2 - 1/r;
 end
 
 % Plot energy versus time

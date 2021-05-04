@@ -30,10 +30,18 @@ skip = ceil(numSteps/numFrames);
 [xan,yan] = kepler_analytic(vel,T);
 
 % Preallocate vectors for speed:
-x = zeros(numSteps,1);
-y = zeros(numSteps,1);
-time = zeros(numSteps,1);
-energy = zeros(numSteps,1);
+time = tau*(0:numSteps);
+x = zeros(numSteps+1,1);
+y = zeros(numSteps+1,1);
+energy = zeros(numSteps+1,1);
+
+% Set initial values:
+x(1) = pos(1);
+y(1) = pos(2);
+r = norm(pos);
+speed = norm(vel);
+accel = -pos/r^3;
+energy(1) = 0.5*speed^2 - 1/r;
 
 %-------------------------------------------------------------------------------
 % Verlet method integration
@@ -41,44 +49,42 @@ energy = zeros(numSteps,1);
 figure(1);
 xlabel('x'); ylabel('y');
 for n = 1:numSteps
-    % Store position and time for plotting: time-step n
-    x(n) = pos(1);
-    y(n) = pos(2);
-    time(n) = (n-1)*tau;
 
     % Plot numerical and analytic solution
     if rem(n,skip)==0
-        plot(x,y,'g-',pos(1),pos(2),'ko',xan,yan,'b',0,0,'ro')
+        plot(x(1:n),y(1:n),'g-',x(n),y(n),'ko',xan,yan,'b',0,0,'ro')
         title(sprintf('Time: %f',time(n)));
         axis('equal'); % Preserve aspect ratio
         drawnow(); % Draw immediately
     end
 
-    % Calculate radial position and acceleration at step n
-    r = norm(pos);
-    accel = -pos/r^3;
-
-    % Verlet Method position:
-    % prev is step n-1
-    % pos is step n
-    % next is step n+1
+    % Take one step of the Verlet Method:
     if n==1
         % Get started with a midpoint method step
         next = pos + tau*vel + 0.5*tau^2*accel;
     else
+        % Normal Verlet update:
         next = 2*pos - prev + tau^2*accel;
     end
 
     % Verlet method: velocity at step n
     if n > 1
-        vel = (next - prev)/(2*tau);
+        vel = (next - pos)/(2*tau);
     end
+
+    % Calculate radial position, speed and acceleration after taking the step:
+    r = norm(next);
     speed = norm(vel);
+    accel = -next/r^3;
 
-    % Calculate total energy at step n and store
-    energy(n) = 0.5*speed^2 - 1/r;
+    % Update energy after taking the step:
+    energy(n+1) = 0.5*speed^2 - 1/r;
 
-    % Update
+    % Store position update:
+    x(n+1) = next(1);
+    y(n+1) = next(2);
+
+    % Update prev and pos to calculate next in the following step:
     prev = pos;
     pos = next;
 end
