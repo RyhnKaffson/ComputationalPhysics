@@ -10,13 +10,13 @@ format('short');
 kappa = 1;
 
 % Time step and spatial step
-tau = 1e-4;
+tau = 4e-4;
 h = 0.02;
 
 % Number of time steps
-numSteps = 25;
-frameUpdateLag = 0.1;
-zoomIn = true;
+numSteps = 50;
+frameUpdateLag = 0.2;
+zoomIn = false;
 
 % Calculate the ratio tau/(th/2), where th is the approximate diffusion
 % time for one spatial step h
@@ -61,8 +61,7 @@ p_Temp0 = plot(x,temp0,'-','Color',[0.17,0.51,0.73],'LineWidth',1.5); % initial 
 p_Temp = plot(x,temp,'o-','Color',[0.84,0.09,0.11],...
                 'MarkerFaceColor',[0.84,0.09,0.11],...
                 'MarkerEdgeColor',[0.99,0.68,0.38]);
-h_legend = legend('Numerical solution',...
-            'Initial profile','Analytic solution');
+h_legend = legend('Analytic solution','Initial profile','Numerical solution');
 h_legend.Box = 'off';
 h_legend.Location = 'NorthWest';
 xlabel('Position (non-dim.)');
