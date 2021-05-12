@@ -14,7 +14,7 @@ tau = 1e-4;
 h = 0.02;
 
 % Number of time steps
-numSteps = 50;
+numSteps = 25;
 frameUpdateLag = 0.1;
 zoomIn = true;
 
@@ -23,8 +23,8 @@ zoomIn = true;
 th = h^2/kappa;
 disp(['Ratio tau/(0.5*th): ',num2str(tau/(0.5*th))]);
 
-% Vector of x values
-x = 0:h:1;
+% Column vector of x values
+x = (0:h:1)';
 L = length(x);
 
 % Construct the matrix D associated with the second spatial
@@ -40,10 +40,10 @@ D(L,:) = zeros(1,L);
 % Construct the update matrix
 A = eye(L) + D;
 
-% Initial conditions: a spike at x = 1/2
-temp1 = zeros(L,1);
-temp1(round(L/2)) = 1/h;
-temp = temp1;
+% Initial conditions, temp0: a spike at x = 1/2
+temp0 = zeros(L,1);
+temp0(round(L/2)) = 1/h;
+temp = temp0; % temp updates across the run
 
 % Record T(x,t) matrix for visualisation
 time = tau*(0:numSteps);
@@ -51,14 +51,13 @@ temp_xt = zeros(L,numSteps+1);
 temp_xt(:,1) = temp;
 
 %-------------------------------------------------------------------------------
-% Plot initial condition
+% Plot initial condition and set up for animation
 f = figure(1);
 f.Color = 'w';
 hold('on')
-% Current profile:
 temp_an = zeros(L,1); % (dummy)
 p_TempAnal = plot(x,temp_an,'k','LineWidth',1.5); % analytical profile
-p_Temp0 = plot(x,temp1,'-','Color',[0.17,0.51,0.73],'LineWidth',1.5); % initial profile
+p_Temp0 = plot(x,temp0,'-','Color',[0.17,0.51,0.73],'LineWidth',1.5); % initial profile
 p_Temp = plot(x,temp,'o-','Color',[0.84,0.09,0.11],...
                 'MarkerFaceColor',[0.84,0.09,0.11],...
                 'MarkerEdgeColor',[0.99,0.68,0.38]);
@@ -80,12 +79,10 @@ for n = 1:numSteps
     sig = sqrt(2*kappa*time(n+1));
     temp_an = exp(-(x - 0.5).^2/(2*sig^2))/(sqrt(2*pi)*sig);
 
-    % Plot the temperature versus position, the initial temperature
-    % profile, and the analytic values, with annotations
+    % Animation:
     title(sprintf('Time: %.2g (%u/%u)',time(n+1),n,numSteps));
     p_Temp.YData = temp; % update current profile
-    p_TempAnal.YData = temp_an; % analytical profile
-
+    p_TempAnal.YData = temp_an; % update analytical profile
     % Follow evolution more closely near end:
     if zoomIn && (n > numSteps/2)
         axis([0 1 min(temp_an) max(temp_an)]);
@@ -102,6 +99,6 @@ end
 % MATLAB uses a surfc(x(i),y(j),z(j,i)) convention, hence the transpose.
 figure(2);
 surfc(x,time,temp_xt');
-shading('interp');
+shading('flat');
 xlabel('Position'); ylabel('Time'); zlabel('Temperature');
 colormap('hot')
