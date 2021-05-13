@@ -3,12 +3,12 @@
 Code to accompany lectures.
 Check back for updates :smile:
 
-## Lecture 1: Projectile motion using the Euler method
+## Week 1: Projectile motion using the Euler method
 
 - `proj_euler.m`.
   - Solves the projectile motion problem using the Euler method.
 
-## Lecture 2: Keplerian dynamics using the Verlet method
+## Week 2: Keplerian dynamics using the Verlet method
 
 - `kepler_euler.m`
   - Solves the Kepler problem using the Euler method.
@@ -17,7 +17,7 @@ Check back for updates :smile:
 - `kepler_analytic.m`
   - Solves the Kepler problem analytically.
 
-## Lecture 3
+## Week 3: A General Form of ODEs and the Simple Pendulum
 
 The exponential problem, dx/dt = x:
 - `exp_euler.m`
@@ -35,16 +35,14 @@ The simple pendulum:
 - `rhs_pend.m`
   - The RHS function for the simple pendulum.
 
-## Lecture 4
-
-Solving the diffusion equation.
+## Week 4: 1D Diffusion
 
 - `diffusion_ftcs.m`
-  - Solves the 1-D diffusion equation for an initial spike profile with Dirichlet conditions using FTCS, in a matrix formulation.
+  - Solves the 1D diffusion equation for an initial spike profile with Dirichlet conditions using FTCS, in a matrix formulation.
 
-## Lecture 5
+## Week 5: 1D Advection
 
-- `advection_ftcs.m`
-  - Solves the advection problem for a Gaussian pulse intial condition.
-- `diffusion_ftcs_n.m`
-  - Solves the 1-D diffusion equation for an initial spike profile with Neumann conditions using FTCS, in a matrix formulation.
+- `advection.m`
+  - Solves the advection problem for a Gaussian pulse intial condition using the FTCS or Lax method.
+
+## Week 6:
