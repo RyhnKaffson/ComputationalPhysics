@@ -41,5 +41,10 @@ Solving the diffusion equation.
 
 - `diffusion_ftcs.m`
   - Solves the 1-D diffusion equation for an initial spike profile with Dirichlet conditions using FTCS, in a matrix formulation.
+
+## Lecture 5
+
+- `advection_ftcs.m`
+  - Solves the advection problem for a Gaussian pulse intial condition.
 - `diffusion_ftcs_n.m`
   - Solves the 1-D diffusion equation for an initial spike profile with Neumann conditions using FTCS, in a matrix formulation.

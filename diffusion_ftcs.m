@@ -55,12 +55,15 @@ temp_xt(:,1) = temp;
 f = figure(1);
 f.Color = 'w';
 hold('on')
+niceRed = [0.84,0.09,0.11];
+niceOrange = [0.99,0.68,0.38];
+niceBlue = [0.17,0.51,0.73];
 temp_an = zeros(L,1); % (dummy)
 p_TempAnal = plot(x,temp_an,'k','LineWidth',1.5); % analytical profile
-p_Temp0 = plot(x,temp0,'-','Color',[0.17,0.51,0.73],'LineWidth',1.5); % initial profile
-p_Temp = plot(x,temp,'o-','Color',[0.84,0.09,0.11],...
-                'MarkerFaceColor',[0.84,0.09,0.11],...
-                'MarkerEdgeColor',[0.99,0.68,0.38]);
+p_Temp0 = plot(x,temp0,'-','Color',niceBlue,'LineWidth',1.5); % initial profile
+p_Temp = plot(x,temp,'o-','Color',niceRed,...
+                'MarkerFaceColor',niceRed,...
+                'MarkerEdgeColor',niceOrange);
 h_legend = legend('Analytic solution','Initial profile','Numerical solution');
 h_legend.Box = 'off';
 h_legend.Location = 'NorthWest';
