@@ -43,6 +43,11 @@ The simple pendulum:
 ## Week 5: 1D Advection
 
 - `advection.m`
-  - Solves the advection problem for a Gaussian pulse intial condition using the FTCS or Lax method.
+  - Solves the advection problem for a Gaussian pulse intial condition using the FTCS and Lax methods.
 
 ## Week 6:
+
+- `laplace_analytic.m`
+  - Analytic solution to Laplace's Equation.
+- `laplace_relax.m`
+  - Solving Laplace's Equation using Jacobi relaxation, Gauss-Seidel, and Successive Over-Relaxation.

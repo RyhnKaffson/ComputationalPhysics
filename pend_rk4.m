@@ -28,7 +28,7 @@ rainbow = jet(64);
 time = (0:numSteps)*tau;
 
 %-------------------------------------------------------------------------------
-% Set up for efficient animation
+% Set up plot for animation:
 figure('color','w');
 h = plot([0,sin(x(1))],[0,-cos(x(1))],'o-k','LineWidth',2);
 axis('equal')

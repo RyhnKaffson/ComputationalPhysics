@@ -4,9 +4,10 @@
 % Clear memory and show only a few digits
 clear('all'); format('short');
 
-% Set the numerical method to use:
+% Set the numerical method to use (comment one out):
 whatMethod = 'ftcs';
 % whatMethod = 'lax';
+fprintf(1,'Using the %s method!\n',whatMethod);
 
 % Propagation speed
 c = 1;
@@ -32,7 +33,7 @@ switch whatMethod
 case 'ftcs'
     M = construct_update_matrix(L,'ftcs_advection',g);
 case 'lax'
-    M = construct_update_matrix(L,'ftcs_lax',g);
+    M = construct_update_matrix(L,'lax_advection',g);
 end
 
 % Calculate the spectral radius of M
