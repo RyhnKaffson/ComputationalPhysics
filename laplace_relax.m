@@ -10,9 +10,9 @@ format('short');
 %-------------------------------------------------------------------------------
 % Select which method to use
 %-------------------------------------------------------------------------------
-% whatMethod = 'Jacobi';
+whatMethod = 'Jacobi';
 % whatMethod = 'GaussSeidel';
-whatMethod = 'SOR';
+% whatMethod = 'SOR';
 fprintf(1,'Using %s Relaxation\n',whatMethod);
 
 %-------------------------------------------------------------------------------

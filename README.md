@@ -51,3 +51,7 @@ The simple pendulum:
   - Analytic solution to Laplace's Equation.
 - `laplace_relax.m`
   - Solving Laplace's Equation using Jacobi relaxation, Gauss-Seidel, and Successive Over-Relaxation.
+
+## Week 7
+
+-
