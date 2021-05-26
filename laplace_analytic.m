@@ -54,7 +54,6 @@ zlabel('Potential, \phi');
 % Plot the electric field
 f2 = figure(2);
 f2.Color = 'w';
-clf('reset');
 hold('on');
 set_color_map()
 contourf(x,y,phi');
