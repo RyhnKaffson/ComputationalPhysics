@@ -45,13 +45,16 @@ The simple pendulum:
 - `advection.m`
   - Solves the advection problem for a Gaussian pulse intial condition using the FTCS and Lax methods.
 
-## Week 6:
+## Week 6: Solving Laplace's Equation using Relaxation Methods
 
 - `laplace_analytic.m`
   - Analytic solution to Laplace's Equation.
 - `laplace_relax.m`
-  - Solving Laplace's Equation using Jacobi relaxation, Gauss-Seidel, and Successive Over-Relaxation.
+  - Solves Laplace's Equation using Jacobi relaxation, Gauss-Seidel, and Successive Over-Relaxation.
 
-## Week 7
+## Week 7: Diffusion Revisited
 
--
+- `diffusion_fimp`
+  - The fully implicit scheme for diffusion: solving a simple Dirichlet BVP.
+- `diffusion_cnic`
+  - Solves the Gaussian pulse IVP with Dirichlet BCs using the Crank-Nicolson scheme.

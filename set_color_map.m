@@ -1,4 +1,5 @@
 function set_color_map()
+% Set a sweet blue/red colormap
 
 blues =     [0.0314    0.1882    0.4196
     0.0314    0.3176    0.6118

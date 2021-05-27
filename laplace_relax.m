@@ -24,14 +24,14 @@ minDiff = 1e-6;  % Convergence criterion
 frameSkip = 1;  % Only plot every frameSkip iterations
 frameUpdateLag = 0; % Slow down animation
 
-% Vectors of x and y values
+% Set up vectors of discretized x and y values
 x = 0:h:1;
 y = x;
 L = length(x);
 
-% Initial phi
+%-------------------------------------------------------------------------------
+% Define initial condition (phi)
 phi_new = zeros(L);
-
 % Impose BCs
 phi_new(2:L-1,L) = 1;
 phi = phi_new;

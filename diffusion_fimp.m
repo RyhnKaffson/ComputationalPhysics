@@ -1,0 +1,92 @@
+% diffusion_fimp.m
+% Solve the 1-D diffusion equation using the fully implicit scheme
+% with Dirichlet BCs
+
+% Clear memory and show only a few digits
+clear('all');
+format('short');
+
+% Parameters
+kappa = 1;           % Thermal conductivity
+h = 0.01;            % Spatial step
+fac = 20;            % For FTCS, this must be <= 1/2 for stability
+numSteps = 100;        % Number of time steps
+tau = fac*h^2/kappa; % Time step
+
+% Display value of FTCS stability factor
+disp(['FTCS stability factor: ',num2str(fac)]);
+
+%-------------------------------------------------------------------------------
+% Column vector of x values
+x = (0:h:1)';
+L = length(x);
+
+% Construct the matrix D associated with the second spatial derivative
+D = -2*eye(L);
+D = D + diag(ones(L-1,1),+1) + diag(ones(L-1,1),-1);
+
+% Construct the matrix in the linear system being solved at each step
+M = eye(L) - fac*D;
+
+% Impose Dirichlet boundary conditions
+M(1,:) = zeros(1,L);
+M(1,1) = 1;
+M(L,:) = zeros(1,L);
+M(L,L) = 1;
+
+% Initial conditions and BCs
+temp = zeros(L,1);
+temp(1) = 0;
+temp(L) = 1;
+
+% Record T(x,t) matrix for visualisation
+temp_xt = zeros(L,numSteps+1);
+temp_xt(:,1) = temp;
+time = tau*(0:numSteps);
+
+%-------------------------------------------------------------------------------
+% Plot initial condition and set up for animation
+f = figure(1);
+f.Color = 'w';
+hold('on')
+niceRed = [0.84,0.09,0.11];
+niceOrange = [0.99,0.68,0.38];
+niceBlue = [0.17,0.51,0.73];
+p_TempEqm = plot(x,x,'-','Color',niceBlue,'LineWidth',1.5); % initial profile
+p_Temp = plot(x,temp,'o-','Color',niceRed,...
+                'MarkerFaceColor',niceRed,...
+                'MarkerEdgeColor',niceOrange);
+h_legend = legend('Equilibrium','Numerical solution');
+h_legend.Box = 'off';
+h_legend.Location = 'NorthWest';
+xlabel('Position (non-dim.)');
+ylabel('Temperature (non-dim.)');
+axis([0 1 0 1]);
+
+%-------------------------------------------------------------------------------
+% March forwards in time
+for n = 1:numSteps
+
+    % Solve the matrix equation for a time step
+    temp = M\temp;
+
+    % Plot the temperature versus position and the equilibrium
+    % solution, with annotations
+    p_Temp.YData = temp;
+    title(['Time: ',num2str(time(n))]);
+    drawnow()
+
+    % Record T(x,t) matrix for visualisation
+    temp_xt(:,n+1) = temp;
+end
+
+%-------------------------------------------------------------------------------
+% Visualize temperature versus position and time as a heatmap
+f2 = figure(2);
+f2.Color = 'w';
+colormap(hot)
+imagesc(x,time,flipud(temp_xt'));
+xlabel('Position');
+ylabel('Time');
+cB = colorbar();
+cB.Label.String = 'Temperature';

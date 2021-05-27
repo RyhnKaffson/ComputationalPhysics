@@ -1,44 +1,40 @@
-% diffusion_ftcs.m
-% Solve the 1-D diffusion equation for an initial spike profile
-% with Dirichlet conditions using FTCS, in a matrix formulation
+% diffusion_cnic.m
+% Solve the diffusion equation using Crank-Nicolson
 
-% Clear memory and show only a few digits
+% Clear memory
 clear('all');
-format('short');
 
 % Thermal conductivity
 kappa = 1;
 
 % Time step and spatial step
-tau = 4e-4;
+tau = 2e-3;
 h = 0.02;
 
 % Number of time steps
 numSteps = 50;
-frameUpdateLag = 0.2;
-zoomIn = false;
+frameUpdateLag = 0.1; % pause between updates
+zoomIn = true;
 
-% Calculate the ratio tau/(th/2), where th is the approximate diffusion
-% time for one spatial step h
-th = h^2/kappa;
-disp(['Ratio tau/(0.5*th): ',num2str(tau/(0.5*th))]);
+% Display value of FTCS stability factor
+fac = kappa*tau/h^2;
+disp(['FTCS stability factor: ',num2str(fac)]);
 
-% Column vector of x values
-x = (0:h:1)';
+% Vector of x values
+x = 0:h:1;
 L = length(x);
 
-% Construct the matrix D associated with the second spatial
-% derivative and the boundary conditions
+% Construct the matrix D associated with the second spatial derivative
 D = -2*eye(L);
 D = D + diag(ones(L-1,1),+1) + diag(ones(L-1,1),-1);
-D = kappa*tau*D/h^2;
 
-% Impose the Dirichlet boundary conditions
+% Impose Dirichlet boundary conditions
 D(1,:) = zeros(1,L);
 D(L,:) = zeros(1,L);
 
-% Construct the update matrix
-A = eye(L) + D;
+% Construct the matrix for the linear system solved at each step of
+% Crank-Nicolson
+A = 0.5*(eye(L) - 0.5*fac*D);
 
 % Initial conditions, temp0: a spike at x = 1/2
 temp0 = zeros(L,1);
@@ -71,23 +67,24 @@ xlabel('Position (non-dim.)');
 ylabel('Temperature (non-dim.)');
 
 %-------------------------------------------------------------------------------
-% March forwards in time, FTCS style!
+% March forwards in time, Crank-Nicholson Style!
 for n = 1:numSteps
 
-    % Update the temperature profile
-    temp = A*temp;
+    % Perform Crank-Nicolson update
+    chi = A\temp;
+    temp = chi - temp;
 
     % Recalculate the profile for the (approximate) analytic solution
     sig = sqrt(2*kappa*time(n+1));
     temp_an = exp(-(x - 0.5).^2/(2*sig^2))/(sqrt(2*pi)*sig);
 
     % Animation:
-    title(sprintf('Time: %.2g (%u/%u)',time(n+1),n,numSteps));
+    title(sprintf('f = %g; Time: %.2g (%u/%u)',...
+                        kappa*tau/h^2,time(n+1),n,numSteps));
     p_Temp.YData = temp; % update current profile
     p_TempAnal.YData = temp_an; % update analytical profile
-    % Follow evolution more closely near end:
-    if zoomIn && (n > numSteps/2)
-        axis([0 1 min(temp_an) max(temp_an)]);
+    if zoomIn
+        ylim([0,max(temp)*1.5])
     end
     drawnow()
     pause(frameUpdateLag);
@@ -97,10 +94,14 @@ for n = 1:numSteps
 end
 
 %-------------------------------------------------------------------------------
-% Visualization of temperature versus position and time.
-% Matlab uses a surfc(x(i),y(j),z(j,i)) convention, hence the transpose.
-figure(2);
-surfc(x,time,temp_xt');
-shading('flat');
-xlabel('Position'); ylabel('Time'); zlabel('Temperature');
-colormap('hot')
+%-------------------------------------------------------------------------------
+% Visualize temperature versus position and time. Matlab
+% uses a surfc(x(i),y(j),z(j,i)) convention, hence the transpose
+f2 = figure(2);
+f2.Color = 'w';
+colormap(hot)
+imagesc(x,time,flipud(temp_xt'));
+xlabel('Position');
+ylabel('Time');
+cB = colorbar();
+cB.Label.String = 'Temperature';
