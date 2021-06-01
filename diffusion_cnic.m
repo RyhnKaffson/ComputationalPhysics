@@ -1,5 +1,6 @@
 % diffusion_cnic.m
 % Solve the diffusion equation using Crank-Nicolson
+%-------------------------------------------------------------------------------
 
 % Clear memory
 clear('all');
@@ -13,7 +14,7 @@ h = 0.02;
 
 % Number of time steps
 numSteps = 50;
-frameUpdateLag = 0.1; % pause between updates
+frameUpdateLag = 0.5; % pause between updates
 zoomIn = true;
 
 % Display value of FTCS stability factor
@@ -70,7 +71,7 @@ ylabel('Temperature (non-dim.)');
 % March forwards in time, Crank-Nicholson Style!
 for n = 1:numSteps
 
-    % Perform Crank-Nicolson update
+    % Perform a Crank-Nicolson update
     chi = A\temp;
     temp = chi - temp;
 

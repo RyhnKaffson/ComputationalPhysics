@@ -2,19 +2,19 @@
 % Solve the 1-D diffusion equation using the fully implicit scheme
 % with Dirichlet BCs
 
-% Clear memory and show only a few digits
+% Clear memory
 clear('all');
-format('short');
 
 % Parameters
 kappa = 1;           % Thermal conductivity
 h = 0.01;            % Spatial step
 fac = 20;            % For FTCS, this must be <= 1/2 for stability
-numSteps = 100;        % Number of time steps
+numSteps = 200;      % Number of time steps
 tau = fac*h^2/kappa; % Time step
+snapshotPeriod = 20; % Take regular snapshots (set to zero for none)
 
-% Display value of FTCS stability factor
-disp(['FTCS stability factor: ',num2str(fac)]);
+% Display the FTCS stability factor
+fprintf('FTCS stability factor: %g (FTCS stable if <1/2)\n',fac);
 
 %-------------------------------------------------------------------------------
 % Column vector of x values
@@ -56,7 +56,7 @@ p_TempEqm = plot(x,x,'-','Color',niceBlue,'LineWidth',1.5); % initial profile
 p_Temp = plot(x,temp,'o-','Color',niceRed,...
                 'MarkerFaceColor',niceRed,...
                 'MarkerEdgeColor',niceOrange);
-h_legend = legend('Equilibrium','Numerical solution');
+h_legend = legend([p_TempEqm,p_Temp],{'Equilibrium','Numerical solution'});
 h_legend.Box = 'off';
 h_legend.Location = 'NorthWest';
 xlabel('Position (non-dim.)');
@@ -73,8 +73,15 @@ for n = 1:numSteps
     % Plot the temperature versus position and the equilibrium
     % solution, with annotations
     p_Temp.YData = temp;
-    title(['Time: ',num2str(time(n))]);
+    title(sprintf('f = %g, Time: %g [%u/%u]',fac,time(n+1),n,numSteps));
     drawnow()
+
+    if snapshotPeriod > 0 && rem(n,snapshotPeriod)==0
+        plot(x,temp,'o-','Color',niceRed,...
+                'MarkerEdgeColor',niceRed,...
+                'MarkerFaceColor',niceRed,...
+                'MarkerSize',3);
+    end
 
     % Record T(x,t) matrix for visualisation
     temp_xt(:,n+1) = temp;
