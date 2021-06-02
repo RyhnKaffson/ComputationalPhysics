@@ -14,7 +14,7 @@ h = 0.02;
 
 % Number of time steps
 numSteps = 50;
-frameUpdateLag = 0.5; % pause between updates
+frameUpdateLag = 0.2; % pause between updates
 zoomIn = true;
 
 % Display value of FTCS stability factor
@@ -61,7 +61,7 @@ p_Temp0 = plot(x,temp0,'-','Color',niceBlue,'LineWidth',1.5); % initial profile
 p_Temp = plot(x,temp,'o-','Color',niceRed,...
                 'MarkerFaceColor',niceRed,...
                 'MarkerEdgeColor',niceOrange);
-h_legend = legend('Analytic solution','Initial profile','Numerical solution');
+h_legend = legend('Approx analytic solution','Initial profile','Numerical solution');
 h_legend.Box = 'off';
 h_legend.Location = 'NorthWest';
 xlabel('Position (non-dim.)');
@@ -100,8 +100,10 @@ end
 % uses a surfc(x(i),y(j),z(j,i)) convention, hence the transpose
 f2 = figure(2);
 f2.Color = 'w';
+ax = gca();
 colormap(hot)
-imagesc(x,time,flipud(temp_xt'));
+imagesc(x,time,temp_xt');
+ax.YDir = 'normal';
 xlabel('Position');
 ylabel('Time');
 cB = colorbar();
